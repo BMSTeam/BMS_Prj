@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<system-libraries>
+    <library path="C:/glassfish4/glassfish/modules/javax.persistence.jar" source="C:/Users/bkfufu/.m2/repository/org/datanucleus/javax.persistence/2.1.0/javax.persistence-2.1.0-sources.jar"/>
+</system-libraries>

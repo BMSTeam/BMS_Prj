@@ -12,10 +12,12 @@
 //_hiddenCategory_\:http\://java.sun.com/jstl/sql_rt=false
 //_hiddenCategory_\:http\://java.sun.com/jstl/xml=false
 //_hiddenCategory_\:http\://java.sun.com/jstl/xml_rt=false
+//_hiddenCategory_\:http\://jboss.com/products/seam/taglib=false
 //_hiddenCategory_\:http\://mojarra.dev.java.net/mojarra_ext=true
 _hiddenCategory_\:HTML=false
 _hiddenCategory_\:ManagedBeans=false
 _hiddenCategory_\:PageVariables=false
 _hiddenCategory_\:jsp11=false
 _hiddenCategory_\:urn\:com\:sun\:jersey\:api\:view=false
+_hiddenCategory_\:urn\:org\:glassfish\:jersey\:servlet\:mvc=false
 eclipse.preferences.version=1

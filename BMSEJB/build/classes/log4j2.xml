@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+	<properties>
+		<property name="name">BMS</property>
+		<property name="pattern">%d{yyyy-MM-dd HH:mm:ss.SSS}|%-5.5p|%-25.25t|%-42.42C:%-4.4L|%msg%n</property>
+	</properties>
+	<appenders>
+		<RollingFile name="RollingFile" fileName="/BMS/log/${name}.log"
+				 filePattern="/BMS/log/$${date:yyyyMMdd}/${name}-%d{yyyy-MM-dd}-%i.log">
+			<PatternLayout>
+				<pattern>${pattern}</pattern>
+			</PatternLayout>
+			<Policies>
+				<TimeBasedTriggeringPolicy /><!-- Rotated everyday -->
+				<SizeBasedTriggeringPolicy size="100 MB"/> <!-- Or every 100 MB -->
+			</Policies>
+			<DefaultRolloverStrategy max="100"/><!-- ให้เก็บ log ได้มากสุด 100 ไฟล์ จากปกติ ได้แค่ 7 ไฟล์จากค่า default -->
+		</RollingFile>
+	</appenders>
+	<loggers>
+		<root level="debug"> <!-- We log everything -->
+			<appender-ref ref="RollingFile"/> <!-- And to a rotated file -->
+		</root>
+	</loggers>
+</configuration>

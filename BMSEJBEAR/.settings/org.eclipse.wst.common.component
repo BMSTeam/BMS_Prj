@@ -11,5 +11,14 @@
         <dependent-module archiveName="BMSJPA.jar" deploy-path="/lib" handle="module:/resource/BMSJPA/BMSJPA">
             <dependency-type>uses</dependency-type>
         </dependent-module>
+        <dependent-module archiveName="gson-2.8.0.jar" deploy-path="/lib" handle="module:/classpath/lib/C:/Users/bkfufu/bms/libraries/Gson/gson-2.8.0.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="log4j-core-2.7.jar" deploy-path="/lib" handle="module:/classpath/lib/C:/Users/bkfufu/bms/libraries/log4j2/log4j-core-2.7.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="log4j-api-2.7.jar" deploy-path="/lib" handle="module:/classpath/lib/C:/Users/bkfufu/bms/libraries/log4j2/log4j-api-2.7.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
     </wb-module>
 </project-modules>

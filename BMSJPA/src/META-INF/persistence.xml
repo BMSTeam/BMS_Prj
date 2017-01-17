@@ -2,10 +2,19 @@
 <persistence version="2.1" xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
 	<persistence-unit name="BMSJPA" transaction-type="JTA">
 		<provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
-		<jta-data-source>jdbc/sql2012</jta-data-source>
-		<class>bms.entity.EmployeeAuthenEntity</class>
-		<properties>
-			<property name="eclipselink.target-server" value="SunAS9"/>
-		</properties>
+		<jta-data-source>jdbc/bms</jta-data-source>
+		<class>bms.entity.Employee</class>
+		<class>bms.entity.EmployeeAuthen</class>
+		<class>bms.entity.EmployeeType</class>
+		<class>bms.entity.Bank</class>
+		<class>bms.entity.Customer</class>
+		<class>bms.entity.Web</class>
+		<class>bms.entity.JoinCustomerBank</class>
+		<class>bms.entity.JoinCustomerBankPK</class>
+		<class>bms.entity.PaymentChannel</class>
+		<class>bms.entity.BetTran</class>
+		<class>bms.entity.JoinCompanyBank</class>
+		<class>bms.entity.JoinCompanyBankPK</class>
+		<shared-cache-mode>NONE</shared-cache-mode>
 	</persistence-unit>
 </persistence>
