@@ -165,9 +165,9 @@ input[type="text"]:focus.noborder-input
 				<li class="dropdown">
 					<a class="dropdown-toggle" data-toggle="dropdown" href="#" id="bms-customer-menu">Customer<span class="caret"></span></a>
 					<ul class="dropdown-menu" aria-labelledby="bms-customer-menu">
-						<li><a href="javascript:void(0);" onclick="actionPage('${context}/Customer/AddCustomer/Form');">Add Customer</a></li>
+						<li><a href="javascript:void(0);" onclick="actionPage('${context}/Customer/Manage/Form');">Manage</a></li>
                 		<li class="divider"></li>
-                		<li><a href="#">Sub2</a></li>
+                		<li><a href="javascript:void(0);" onclick="actionPage('${context}/Customer/AddCustomer/Form');">Add New</a></li>
 					</ul>
 				</li>
 			</ul>
@@ -590,18 +590,12 @@ var searchCustomer = function(){
 		},
 		error: function(jqXHR,textStatus,errorThrown) {
 		
-			var required_auth = jqXHR.getResponseHeader("REQUIRED_AUTH");
-		
-			if(required_auth==="1") {
-				actionPage("${context}");
-			} else {
-				clearData();
+			clearData();
 			
-				var modal = $("#messageModal");
-				modal.find(".modal-title").html("Error");
-				modal.find(".modal-body").html(jqXHR.responseText);
-				modal.modal('toggle');
-			}
+			var modal = $("#messageModal");
+			modal.find(".modal-title").html("Error");
+			modal.find(".modal-body").html(jqXHR.responseText);
+			modal.modal('toggle');
 		}
 	});
 };
@@ -613,7 +607,7 @@ var getAllBetTran = function(){
 	
 	$.ajax({
 		method: "POST",
-		url: "${context}/Customer/GetAllBetTran",
+		url: "${context}/BetTran/GetAllBetTran",
 		cache: false,
 		data: {},
 		dataType: "json",
@@ -673,18 +667,12 @@ var getAllBetTran = function(){
 		},
 		error: function(jqXHR,textStatus,errorThrown) {
 		
-			var required_auth = jqXHR.getResponseHeader("REQUIRED_AUTH");
-		
-			if(required_auth==="1") {
-				actionPage("${context}");
-			} else {
-				clearData();
+			clearData();
 			
-				var modal = $("#messageModal");
-				modal.find(".modal-title").html("Error");
-				modal.find(".modal-body").html(jqXHR.responseText);
-				modal.modal('toggle');
-			}
+			var modal = $("#messageModal");
+			modal.find(".modal-title").html("Error");
+			modal.find(".modal-body").html(jqXHR.responseText);
+			modal.modal('toggle');
 		}
 	});
 };
@@ -805,18 +793,12 @@ var saveBetTran = function(param){
 		},
 		error: function(jqXHR,textStatus,errorThrown) {
 		
-			var required_auth = jqXHR.getResponseHeader("REQUIRED_AUTH");
-		
-			if(required_auth==="1") {
-				actionPage("${context}");
-			} else {
-				clearData();
+			clearData();
 			
-				var modal = $("#messageModal");
-				modal.find(".modal-title").html("Error");
-				modal.find(".modal-body").html(jqXHR.responseText);
-				modal.modal('toggle');
-			}
+			var modal = $("#messageModal");
+			modal.find(".modal-title").html("Error");
+			modal.find(".modal-body").html(jqXHR.responseText);
+			modal.modal('toggle');
 		}
 	});
 };

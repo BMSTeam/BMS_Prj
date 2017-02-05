@@ -1,29 +1,25 @@
-package bms.bettran;
+package bms.customer;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 
-import javax.naming.Context;
-import javax.naming.InitialContext;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import bms.ejb.BetTranRemote;
-
 /**
- * Servlet implementation class GetAllBetTran
+ * Servlet implementation class ManageCustomer
  */
-@WebServlet("/BetTran/GetAllBetTran")
-public class GetAllBetTran extends HttpServlet {
+@WebServlet("/Customer/Manage/*")
+public class ManageCustomer extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public GetAllBetTran() {
+    public ManageCustomer() {
         super();
     }
 
@@ -43,22 +39,14 @@ public class GetAllBetTran extends HttpServlet {
 
 	private void process(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		response.setHeader("Content-Type", "text/xml; charset=UTF-8");
-		response.setContentType("application/json");
-		PrintWriter out = response.getWriter();
-		
-		try {
+		if(request.getPathInfo().equals("/Form")) {
 			
-			Context context = new InitialContext();
-			BetTranRemote remote = (BetTranRemote) context.lookup("BMS.BetTranEJB");
+			RequestDispatcher rd = request.getRequestDispatcher("/customer.jsp");
+			rd.forward(request, response);
 			
-			out.println(remote.getAllBetTran());
+		} else if(request.getPathInfo().equals("/Edit")) {
 			
-		} catch (Exception e) {
-			out.println(e.getMessage());
 		}
-		
-		out.close();
 	}
 
 }

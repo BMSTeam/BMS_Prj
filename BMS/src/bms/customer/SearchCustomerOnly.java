@@ -15,16 +15,17 @@ import bms.ejb.CustomerRemote;
 import bms.ejb.model.CustomerInputBean;
 
 /**
- * Servlet implementation class SearchCustomer
+ * Servlet implementation class SearchCustomerOnly
  */
-@WebServlet("/Customer/SearchCustomer")
-public class SearchCustomer extends HttpServlet {
+@WebServlet("/Customer/SearchCustomerOnly")
+public class SearchCustomerOnly extends HttpServlet {
+	
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public SearchCustomer() {
+    public SearchCustomerOnly() {
         super();
     }
 
@@ -42,7 +43,7 @@ public class SearchCustomer extends HttpServlet {
 		process(request,response);
 	}
 
-	private void process(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException  {
+	private void process(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 		response.setHeader("Content-Type", "text/xml; charset=UTF-8");
 		response.setContentType("application/json");
@@ -50,17 +51,23 @@ public class SearchCustomer extends HttpServlet {
 		
 		try {
 			
-			String user = request.getParameter("user");
-			String telelphone = request.getParameter("telelphone");
+			String user = request.getParameter("userName");
+			String firstName = request.getParameter("firstName");
+			String lastName = request.getParameter("lastName");
+			String telelphone = request.getParameter("telephone");
+			String webCode = request.getParameter("webCode");
 			
 			CustomerInputBean input = new CustomerInputBean();
 			input.setUserName(user);
+			input.setFirstName(firstName);
+			input.setLastName(lastName);
 			input.setTelephone(telelphone);
+			input.setWebCode(webCode);
 			
 			Context context = new InitialContext();
 			CustomerRemote remote = (CustomerRemote) context.lookup("BMS.CustomerEJB");
 			
-			out.println(remote.searchCustomer(input));
+			out.println(remote.searchCustomerOnly(input));
 			
 		} catch (Exception e) {
 			out.println(e.getMessage());

@@ -7,7 +7,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=8,IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<title>Add Customer</title>
+<title>Customer</title>
 
 <c:set var="context" value="${pageContext.request.contextPath}" />
 
@@ -76,7 +76,7 @@ textarea
 	width:100%;
 	height:100%;
 	z-index:9999;
-	background:url('assets/img/loading.gif') 50% 50% no-repeat;
+	background:url('${context}/assets/img/loading.gif') 50% 50% no-repeat;
 	background-size:100px 100px;
 	display:none;
 }
@@ -100,9 +100,9 @@ textarea
 				<li class="dropdown">
 					<a class="dropdown-toggle" data-toggle="dropdown" href="#" id="bms-customer-menu">Customer<span class="caret"></span></a>
 					<ul class="dropdown-menu" aria-labelledby="bms-customer-menu">
-						<li><a href="javascript:void(0);" onclick="actionPage('${context}/Customer/AddCustomer/Form');">Add Customer</a></li>
+						<li><a href="javascript:void(0);" onclick="actionPage('${context}/Customer/Manage/Form');">Manage</a></li>
                 		<li class="divider"></li>
-                		<li><a href="#">Sub2</a></li>
+                		<li><a href="javascript:void(0);" onclick="actionPage('${context}/Customer/AddCustomer/Form');">Add New</a></li>
 					</ul>
 				</li>
 			</ul>
@@ -186,7 +186,7 @@ textarea
 			</table>
 			
 			<button type="button" class="btn btn-primary btn-sm" onclick="prepareSaveCustomer();">Save</button>
-			<button type="reset" class="btn btn-default btn-sm" onclick="clearData()">Clear</button>
+			<button type="reset" id="btnReset" class="btn btn-default btn-sm" onclick="clearData()">Clear</button>
 		
 		</div>
 		
@@ -201,7 +201,6 @@ textarea
 	<div class="modal-dialog" role="document">
 		<div class="modal-content">
 			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 				<h4 class="modal-title">Modal title</h4>
 			</div>
 			<div class="modal-body"></div>
@@ -222,7 +221,7 @@ textarea
 			<div class="modal-body"></div>
 			<div class="modal-footer">
 				<input type="hidden" id="h_customerInfo" value=""/>
-				<button type="button" class="btn btn-primary btn-confirm-yes" data-dismiss="modal">Yes</button>
+				<button type="button" id="btn-confirm-yes" class="btn btn-primary" data-dismiss="modal">Yes</button>
 				<button type="button" class="btn btn-default" data-dismiss="modal">No</button>
 			</div>
 		</div>
@@ -244,6 +243,37 @@ var logout = function(){
 	);
 };
 
+var GetWebSelect = function(webcode) {
+
+	if(webcode!="") {
+	
+		$.get( "${context}/Web/GetWebs", function( data ) {
+			
+			if(data["response"]=="success") {
+				$.each(data["message"]["webs"], function(indx,item){
+					if(item["webCode"]==obj_customer.webCode) {
+						$("#selCustomerFromWeb").append($("<option>").val(item["webCode"]).attr('selected','selected').text(item["webCode"]));
+					} else {
+						$("#selCustomerFromWeb").append($("<option>").val(item["webCode"]).text(item["webCode"]));
+					}
+					
+				});
+			}
+		});
+		
+	} else {
+	
+		$.get( "${context}/Web/GetWebs", function( data ) {
+			
+			if(data["response"]=="success") {
+				$.each(data["message"]["webs"], function(indx,item){
+					$("#selCustomerFromWeb").append($("<option>").val(item["webCode"]).text(item["webCode"]));
+				});
+			}
+		});
+	}
+}
+
 $(function(){
 
 	$("#txtCustomerUser").focus();
@@ -257,14 +287,61 @@ $(function(){
 		}
 	});
 	
-	$.get( "${context}/Web/GetWebs", function( data ) {
+	var EditCustomer = '${editCustomer}';
+	if(EditCustomer != "") {
+	
+		var customer = JSON.parse(EditCustomer);
 		
-		if(data["response"]=="success") {
-			$.each(data["message"]["webs"], function(indx,item){
-				$("#selCustomerFromWeb").append($("<option>").val(item["webCode"]).text(item["webCode"]));
-			});
+		obj_customer.userName = customer.userName;
+		obj_customer.firstName = customer.firstName;
+		obj_customer.lastName = customer.lastName;
+		obj_customer.telephone = customer.telephone;
+		obj_customer.webCode = customer.webCode;
+		obj_customer.remark = customer.remark;
+		
+		$("#txtCustomerUser").attr('readonly',true).val(obj_customer.userName);
+		$("#txtCustomerFirstName").val(obj_customer.firstName);
+		$("#txtCustomerLastName").val(obj_customer.lastName);
+		$("#txtCustomerTel").val(obj_customer.telephone);
+		$("#txtCustomerRemark").val(obj_customer.remark);
+		
+		var tableBank = $("#tbBank").find("tbody");
+		tableBank.empty();
+		
+		$.each(customer.banks, function(indx,item){
+		
+			arr_bank.push({ bankCode:item["bankCode"], bankText:item["bankThName"], bankNo:item["bankNo"] });
+			
+			tableBank.append(
+				$("<tr>")
+					.append($("<td class='text-center'>").text(indx+1))
+					.append($("<td class='text-center'>").text(item["bankCode"]))
+					.append($("<td class='text-center'>").text(item["bankThName"]))
+					.append($("<td class='text-center'>").text(item["bankNo"]))
+					.append($("<td class='text-center'>")
+						.append($('<a href="javascript:void(0);" class="text-danger">').html('<b>Delete</b>')
+							.attr('onclick', 'deleteBank("' + item["bankCode"] + '", "' + item["bankNo"] + '")')))
+			);
+		});
+		
+		if($.isEmptyObject(arr_bank)) {
+			tableBank.append(
+				$("<tr>")
+					.append($("<td colspan='5' class='text-center'>").text("No data"))
+			);
 		}
-	});
+		
+		obj_customer.banks = arr_bank;
+		
+		GetWebSelect(obj_customer.webCode);
+		
+		$('#btn-confirm-yes').attr('onclick',"ClickSave('edit')");
+		$('#btnReset').attr('onclick',"actionPage('${context}/Customer/Manage/Form')").text('Cancel');
+		
+	} else {
+		GetWebSelect("");
+		$('#btn-confirm-yes').attr('onclick',"ClickSave('add')");
+	}
 	
 });
 
@@ -305,17 +382,21 @@ var addBank = function() {
 		arr_bank.push({ bankCode:bankCode, bankText:bankText, bankNo:bankNo });
 		
 		var tableBank = $("#tbBank").find("tbody");
-		tableBank.find("tr:first").children().remove();
-		tableBank.append(
-			$("<tr>")
-				.append($("<td class='text-center'>").text(tableBank.find("tr").length))
-				.append($("<td class='text-center'>").text(bankCode))
-				.append($("<td class='text-center'>").text(bankText))
-				.append($("<td class='text-center'>").text(bankNo))
-				.append($("<td class='text-center'>")
-					.append($('<a href="javascript:void(0);" class="text-danger">').html('<b>Delete</b>')
-						.attr('onclick', 'deleteBank("' + bankCode + '","' + bankNo + '")')))
-		);
+		tableBank.empty();
+		
+		$.each(arr_bank, function(indx,item){
+			tableBank.append(
+				$("<tr>")
+					.append($("<td class='text-center'>").text(indx+1))
+					.append($("<td class='text-center'>").text(item["bankCode"]))
+					.append($("<td class='text-center'>").text(item["bankText"]))
+					.append($("<td class='text-center'>").text(item["bankNo"]))
+					.append($("<td class='text-center'>")
+						.append($('<a href="javascript:void(0);" class="text-danger">').html('<b>Delete</b>')
+							.attr('onclick', 'deleteBank("' + item["bankCode"] + '", "' + item["bankNo"] + '")')))
+			);
+		});
+		
 	} else {
 		var modal = $("#messageModal");
 		modal.find(".modal-title").html("Message");
@@ -370,14 +451,22 @@ var prepareSaveCustomer = function() {
 	modal.modal('toggle');
 }
 
-var saveCustomer = function(param){
+var saveCustomer = function(param, action){
 	
 	var bgOverlay = $("#bgOverlay");
 	var loadingImg = $("#loadingImg");
 	
+	var _url = '';
+	
+	if(action=="add") {
+		_url = '${context}/Customer/AddCustomer/Add';
+	} else if(action=="edit") {
+		_url = '${context}/Customer/EditCustomer/Edit';
+	}
+	
 	$.ajax({
 		method: "POST",
-		url: "${context}/Customer/AddCustomer/Add",
+		url: _url,
 		cache: false,
 		data: param,
 		dataType: "json",
@@ -397,6 +486,7 @@ var saveCustomer = function(param){
 				
 				modal.find(".modal-title").html("Message");
 				modal.find(".modal-body").html("Save customer success.");
+				modal.find(".modal-footer").find("button").attr('onclick',"actionPage('${context}/Customer/Manage/Form')");
 				modal.modal('toggle');
 				
 			} else {
@@ -408,25 +498,19 @@ var saveCustomer = function(param){
 		},
 		error: function(jqXHR,textStatus,errorThrown) {
 			
-			var required_auth = jqXHR.getResponseHeader("REQUIRED_AUTH");
-		
-			if(required_auth==="1") {
-				actionPage("${context}");
-			} else {
-				clearData();
+			clearData();
 			
-				var modal = $("#messageModal");
-				modal.find(".modal-title").html("Error");
-				modal.find(".modal-body").html(jqXHR.responseText);
-				modal.modal('toggle');
-			}
+			var modal = $("#messageModal");
+			modal.find(".modal-title").html("Error");
+			modal.find(".modal-body").html(jqXHR.responseText);
+			modal.modal('toggle');
 		}
 	});
 };
 
-$(".btn-confirm-yes").on('click', function(){
-	saveCustomer($("#h_customerInfo").val());
-});
+var ClickSave = function(action) {
+	saveCustomer($("#h_customerInfo").val(), action);
+};
 
 </script>
 </body>

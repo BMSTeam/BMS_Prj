@@ -30,4 +30,8 @@ public class BMSUtil {
 	    }
 	    return list.get(0);
 	}
+	
+	public static boolean isNotNull(String text) {
+		return text != null && !text.isEmpty();
+	}
 }

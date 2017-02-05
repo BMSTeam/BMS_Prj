@@ -12,19 +12,18 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import bms.ejb.CustomerRemote;
-import bms.ejb.model.CustomerInputBean;
 
 /**
- * Servlet implementation class SearchCustomer
+ * Servlet implementation class DeleteCustomer
  */
-@WebServlet("/Customer/SearchCustomer")
-public class SearchCustomer extends HttpServlet {
+@WebServlet("/Customer/DeleteCustomer")
+public class DeleteCustomer extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public SearchCustomer() {
+    public DeleteCustomer() {
         super();
     }
 
@@ -42,7 +41,7 @@ public class SearchCustomer extends HttpServlet {
 		process(request,response);
 	}
 
-	private void process(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException  {
+	private void process(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 		response.setHeader("Content-Type", "text/xml; charset=UTF-8");
 		response.setContentType("application/json");
@@ -50,17 +49,12 @@ public class SearchCustomer extends HttpServlet {
 		
 		try {
 			
-			String user = request.getParameter("user");
-			String telelphone = request.getParameter("telelphone");
-			
-			CustomerInputBean input = new CustomerInputBean();
-			input.setUserName(user);
-			input.setTelephone(telelphone);
+			String customer = request.getParameter("userName");
 			
 			Context context = new InitialContext();
 			CustomerRemote remote = (CustomerRemote) context.lookup("BMS.CustomerEJB");
-			
-			out.println(remote.searchCustomer(input));
+
+			out.println(remote.deleteCustomer(customer));
 			
 		} catch (Exception e) {
 			out.println(e.getMessage());
