@@ -80,6 +80,12 @@ textarea
 	background-size:100px 100px;
 	display:none;
 }
+input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button
+{ 
+	-webkit-appearance: none;
+	margin: 0; 
+}
 </style>
 
 </head>
@@ -136,7 +142,7 @@ textarea
 				</tr>
 				<tr>
 					<td class="td-middle">Tel :</td>
-					<td><input type="text" id="txtCustomerTel" class="form-control input-sm"></td>
+					<td><input type="number" id="txtCustomerTel" class="form-control input-sm"></td>
 					<td class="td-middle">From Web :</td>
 					<td>
 						<select id="selCustomerFromWeb" class="form-control input-sm">
@@ -161,7 +167,7 @@ textarea
 						</select>
 					</td>
 					<td class="td-middle">Acc No :</td>
-					<td><input type="text" id="txtBankAccNo" class="form-control input-sm"></td>
+					<td><input type="number" id="txtBankAccNo" class="form-control input-sm"></td>
 					<td>
 						<button type="button" class="btn btn-default btn-sm" onclick="addBank();">Add Bank</button>
 					</td>
@@ -436,12 +442,28 @@ var deleteBank = function(bankCode, bankNo) {
 }
 
 var prepareSaveCustomer = function() {
-	obj_customer.userName = $("#txtCustomerUser").val();
-	obj_customer.firstName = $("#txtCustomerFirstName").val();
-	obj_customer.lastName = $("#txtCustomerLastName").val();
-	obj_customer.telephone = $("#txtCustomerTel").val();
-	obj_customer.webCode = $("#selCustomerFromWeb").val();
-	obj_customer.remark = $("#txtCustomerRemark").val();
+	
+	var userName = $("#txtCustomerUser").val();
+	var firstName = $("#txtCustomerFirstName").val();
+	var lastName = $("#txtCustomerLastName").val();
+	var telephone = $("#txtCustomerTel").val();
+	var webCode = $("#selCustomerFromWeb").val();
+	var remark = $("#txtCustomerRemark").val();
+	
+	if(userName=='' || firstName=='' || lastName=='' || telephone=='' || webCode=='' || arr_bank.length==0) {
+		var modal = $("#messageModal");
+			modal.find(".modal-title").html("Warning");
+			modal.find(".modal-body").html("Please complete your infomation.");
+			modal.modal('toggle');
+		return;
+	}
+
+	obj_customer.userName = userName;
+	obj_customer.firstName = firstName;
+	obj_customer.lastName = lastName;
+	obj_customer.telephone = telephone;
+	obj_customer.webCode = webCode;
+	obj_customer.remark = remark;
 	obj_customer.banks = arr_bank;
 	
 	$("#h_customerInfo").val(JSON.stringify(obj_customer));

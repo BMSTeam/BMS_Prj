@@ -9,6 +9,7 @@ import java.util.Map;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
 import org.apache.logging.log4j.LogManager;
@@ -153,51 +154,82 @@ public class CustomerEJB implements CustomerRemote {
 		
 		try {
 			
-			TypedQuery<Web> webQuery = em.createQuery("SELECT w FROM Web w WHERE w.webCode=:webCode", Web.class);
-			webQuery.setParameter("webCode", customer.getWebCode());
-			Web webEntity = BMSUtil.getSingleResultOrNull(webQuery);
-			
-			Customer cus = new Customer();
-			
-			cus.setUserName(customer.getUserName());
-			cus.setCusFirstName(customer.getFirstName());
-			cus.setCusLastName(customer.getLastName());
-			cus.setCusTel(customer.getTelephone());
-			cus.setWeb(webEntity);
-			cus.setRemark(customer.getRemark());
-			cus.setCreateBy(customer.getCreateBy());
-			
-			em.persist(cus);
-			
-			for(Map<String, String> mp : customer.getBanks()) {
-				
-				TypedQuery<Bank> bankQuery = em.createQuery("SELECT b FROM Bank b WHERE b.bankCode=:bankCode", Bank.class);
-				bankQuery.setParameter("bankCode", mp.get("bankCode"));
-				Bank bankEntity = BMSUtil.getSingleResultOrNull(bankQuery);
-				
-				JoinCustomerBankPK jcusBankPk = new JoinCustomerBankPK();
-				jcusBankPk.setBankId(bankEntity.getBankId());
-				jcusBankPk.setUserName(cus.getUserName());
-				
-				JoinCustomerBank jcusBank = new JoinCustomerBank();
-				jcusBank.setId(jcusBankPk);
-				jcusBank.setBankNo(mp.get("bankNo"));
-				jcusBank.setStatus((short) 1);
-				jcusBank.setCreateBy(customer.getCreateBy());
-				jcusBank.setCreateDate(new Timestamp(System.currentTimeMillis()));
-				
-				jcusBank.setBank(bankEntity);
-				jcusBank.setCustomer(cus);
-				
-				em.persist(jcusBank);
+			List<String> bankNoList = new ArrayList<String>();
+			for(Map<String,String> m : customer.getBanks()) {
+				bankNoList.add("'" + m.get("bankNo") + "'");
 			}
 			
-			em.flush();
+			String bankListString = bankNoList.toString().replaceAll("\\[", "");
+			bankListString = bankListString.replaceAll("\\]", "");
 			
-			jsonObj.addProperty("response", "success");
-			jsonObj.add("message", BMSUtil.ConvertJavaObjToJsonObj(customer));
+			String sqlCheckCustomer =
+					" SELECT COUNT(*) AS EXIST_USER " +
+					" FROM Customer c " +
+					" INNER JOIN JoinCustomerBank jb ON jb.UserName = c.UserName " +
+					" WHERE " +
+					" c.UserName = ?1 " +
+					" OR c.CusTel = ?2 " +
+					" OR CONCAT(c.CusFirstName, c.CusLastName) = ?3 " +
+					" OR jb.BankNo IN (?4) ";
 			
-			logger.debug(gson.toJson(customer));
+			Query queryCheckCustomer = em.createNativeQuery(sqlCheckCustomer);
+			queryCheckCustomer.setParameter(1, customer.getUserName());
+			queryCheckCustomer.setParameter(2, customer.getTelephone());
+			queryCheckCustomer.setParameter(3, customer.getFirstName() + customer.getLastName());
+			queryCheckCustomer.setParameter(4, bankListString);
+			
+			int countResult = (int) queryCheckCustomer.getResultList().get(0);
+			
+			if(countResult > 0) {
+				jsonObj.addProperty("response", "error");
+				jsonObj.addProperty("message", "This customer is already exist.");
+			} else {
+				TypedQuery<Web> webQuery = em.createQuery("SELECT w FROM Web w WHERE w.webCode=:webCode", Web.class);
+				webQuery.setParameter("webCode", customer.getWebCode());
+				Web webEntity = BMSUtil.getSingleResultOrNull(webQuery);
+				
+				Customer cus = new Customer();
+				
+				cus.setUserName(customer.getUserName());
+				cus.setCusFirstName(customer.getFirstName());
+				cus.setCusLastName(customer.getLastName());
+				cus.setCusTel(customer.getTelephone());
+				cus.setWeb(webEntity);
+				cus.setRemark(customer.getRemark());
+				cus.setCreateBy(customer.getCreateBy());
+				
+				em.persist(cus);
+				
+				for(Map<String, String> mp : customer.getBanks()) {
+					
+					TypedQuery<Bank> bankQuery = em.createQuery("SELECT b FROM Bank b WHERE b.bankCode=:bankCode", Bank.class);
+					bankQuery.setParameter("bankCode", mp.get("bankCode"));
+					Bank bankEntity = BMSUtil.getSingleResultOrNull(bankQuery);
+					
+					JoinCustomerBankPK jcusBankPk = new JoinCustomerBankPK();
+					jcusBankPk.setBankId(bankEntity.getBankId());
+					jcusBankPk.setUserName(cus.getUserName());
+					
+					JoinCustomerBank jcusBank = new JoinCustomerBank();
+					jcusBank.setId(jcusBankPk);
+					jcusBank.setBankNo(mp.get("bankNo"));
+					jcusBank.setStatus((short) 1);
+					jcusBank.setCreateBy(customer.getCreateBy());
+					jcusBank.setCreateDate(new Timestamp(System.currentTimeMillis()));
+					
+					jcusBank.setBank(bankEntity);
+					jcusBank.setCustomer(cus);
+					
+					em.persist(jcusBank);
+				}
+				
+				em.flush();
+				
+				jsonObj.addProperty("response", "success");
+				jsonObj.add("message", BMSUtil.ConvertJavaObjToJsonObj(customer));
+				
+				logger.debug(gson.toJson(customer));
+			}
 			
 		} catch (Exception e) {
 			jsonObj.addProperty("response", "error");

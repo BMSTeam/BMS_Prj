@@ -423,6 +423,7 @@ var editCustomer = function(userName) {
 	form.attr('method','post');
 	
 	form.html($('<input type="hidden" name="editCustomer">').val(JSON.stringify(param)));
+	form.appendTo('body');
 	form.submit();
 };
 
