@@ -1,4 +1,4 @@
-package bms.customer;
+package bms.employee;
 
 import java.io.IOException;
 
@@ -10,16 +10,16 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * Servlet implementation class ManageCustomer
+ * Servlet implementation class ManageEmployee
  */
-@WebServlet("/Customer/Manage/*")
-public class ManageCustomer extends HttpServlet {
+@WebServlet("/Employee/Manage/*")
+public class ManageEmployee extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public ManageCustomer() {
+    public ManageEmployee() {
         super();
     }
 
@@ -36,12 +36,12 @@ public class ManageCustomer extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		process(request,response);
 	}
-
+	
 	private void process(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 		if(request.getPathInfo().equals("/Form")) {
 			
-			RequestDispatcher rd = request.getRequestDispatcher("/customer.jsp");
+			RequestDispatcher rd = request.getRequestDispatcher("/employee.jsp");
 			rd.forward(request, response);
 			
 		}

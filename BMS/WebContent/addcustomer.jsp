@@ -111,6 +111,14 @@ input[type=number]::-webkit-outer-spin-button
                 		<li><a href="javascript:void(0);" onclick="actionPage('${context}/Customer/AddCustomer/Form');">Add New</a></li>
 					</ul>
 				</li>
+				<li class="dropdown">
+					<a class="dropdown-toggle" data-toggle="dropdown" href="#" id="bms-employee-menu">Employee<span class="caret"></span></a>
+					<ul class="dropdown-menu" aria-labelledby="bms-employee-menu">
+						<li><a href="javascript:void(0);" onclick="actionPage('${context}/Employee/Manage/Form');">Manage</a></li>
+                		<li class="divider"></li>
+                		<li><a href="javascript:void(0);" onclick="actionPage('${context}/Employee/AddEmployee/Form');">Add New</a></li>
+					</ul>
+				</li>
 			</ul>
 			<ul class="nav navbar-nav navbar-right">
 				<li><a href="javascript:void(0);"><c:out value="${username}"/></a></li>

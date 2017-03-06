@@ -1,7 +1,9 @@
 package bms.entity;
 
 import java.io.Serializable;
+
 import javax.persistence.*;
+
 import java.sql.Timestamp;
 
 
@@ -24,9 +26,6 @@ public class EmployeeAuthen implements Serializable {
 	@Column(name="CreateDate")
 	private Timestamp createDate;
 
-	@Column(name="EmpId")
-	private int empId;
-
 	@Column(name="LastLogin")
 	private Timestamp lastLogin;
 
@@ -41,6 +40,10 @@ public class EmployeeAuthen implements Serializable {
 
 	@Column(name="Version")
 	private long version;
+	
+	@OneToOne
+	@JoinColumn(name="EmpId")
+	private Employee employee;
 
 	public EmployeeAuthen() {
 	}
@@ -67,14 +70,6 @@ public class EmployeeAuthen implements Serializable {
 
 	public void setCreateDate(Timestamp createDate) {
 		this.createDate = createDate;
-	}
-
-	public int getEmpId() {
-		return this.empId;
-	}
-
-	public void setEmpId(int empId) {
-		this.empId = empId;
 	}
 
 	public Timestamp getLastLogin() {
@@ -115,6 +110,14 @@ public class EmployeeAuthen implements Serializable {
 
 	public void setVersion(long version) {
 		this.version = version;
+	}
+
+	public Employee getEmployee() {
+		return employee;
+	}
+
+	public void setEmployee(Employee employee) {
+		this.employee = employee;
 	}
 
 }

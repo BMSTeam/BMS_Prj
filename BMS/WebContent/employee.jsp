@@ -7,7 +7,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=8,IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<title>Customer</title>
+<title>Employee</title>
 
 <c:set var="context" value="${pageContext.request.contextPath}" />
 
@@ -41,7 +41,7 @@ textarea
 {
     vertical-align: middle;
 }
-#tbCustomer th
+#tbEmployee th
 {
 	background-color: #04063A;
 	color: white;
@@ -121,7 +121,7 @@ textarea
 <div class="container-fluid">
 	<div class="row">
 	
-		<div class="col-lg-5 col-centered">
+		<div class="col-lg-6 col-centered">
 		
 			<br>
 			
@@ -129,25 +129,29 @@ textarea
 			<table class="table table-condensed font-12px borderless">
 				<tr>
 					<td class="td-middle">User :</td>
-					<td><input type="text" id="txtCustomerUser" class="form-control input-sm"></td>
+					<td><input type="text" id="txtEmployeeUser" class="form-control input-sm"></td>
 					<td>&nbsp;</td>
 					<td>&nbsp;</td>
 				</tr>
 				<tr>
 					<td class="td-middle">First Name :</td>
-					<td><input type="text" id="txtCustomerFirstName" class="form-control input-sm"></td>
+					<td><input type="text" id="txtEmployeeFirstName" class="form-control input-sm"></td>
 					<td class="td-middle">Last Name :</td>
-					<td><input type="text" id="txtCustomerLastName" class="form-control input-sm"></td>
+					<td><input type="text" id="txtEmployeeLastName" class="form-control input-sm"></td>
 				</tr>
 				<tr>
-					<td class="td-middle">Tel :</td>
-					<td><input type="text" id="txtCustomerTel" class="form-control input-sm"></td>
-					<td class="td-middle">From Web :</td>
+					<td class="td-middle">Nick Name :</td>
+					<td><input type="text" id="txtEmployeeNickName" class="form-control input-sm"></td>
+					<td class="td-middle">Employee Type :</td>
 					<td>
-						<select id="selCustomerFromWeb" class="form-control input-sm">
-							<option value="">Select Web</option>
+						<select id="selEmployeeType" class="form-control input-sm">
+							<option value="">Select Type</option>
 						</select>
 					</td>
+				</tr>
+				<tr>
+					<td class="td-middle">Remark :</td>
+					<td colspan="3"><textarea id="txtEmployeeRemark" class="form-control input-sm" rows="2"></textarea></td>
 				</tr>
 			</table>
 			</form>
@@ -155,8 +159,8 @@ textarea
 			<table class="table table-condensed font-12px borderless">
 				<tr>
 					<td style="text-align:center;">
-						<button type="button" class="btn btn-primary btn-sm" onclick="searchCustomer();">Search</button>
-						<button type="reset" class="btn btn-default btn-sm" onclick="clearData()">Clear</button>
+						<button type="button" class="btn btn-primary btn-sm" onclick="SearchEmployee();">Search</button>
+						<button type="reset" class="btn btn-default btn-sm" onclick="ClearData()">Clear</button>
 					</td>
 				</tr>
 			</table>
@@ -170,23 +174,23 @@ textarea
 			<table class="table table-condensed font-12px borderless">
 				<tr>
 					<td>
-						<button type="button" class="btn btn-default btn-sm" onclick="actionPage('${context}/Customer/AddCustomer/Form');">
-							Add Customer
+						<button type="button" class="btn btn-default btn-sm" onclick="actionPage('${context}/Employee/AddEmployee/Form');">
+							Add Employee
 						</button>
 					</td>
 				</tr>
 			</table>
 			
-			<table id="tbCustomer" class="table table-bordered table-condensed table-hover font-12px">
+			<table id="tbEmployee" class="table table-bordered table-condensed table-hover font-12px">
 				<thead>
 					<tr>
 						<th class="text-center">No</th>
 						<th class="text-center">User</th>
 						<th class="text-center">First Name</th>
 						<th class="text-center">Last Name</th>
-						<th class="text-center">Tel.</th>
+						<th class="text-center">Nick Name</th>
+						<th class="text-center">Employee Type</th>
 						<th class="text-center">Remark</th>
-						<th class="text-center">From Web</th>
 						<th class="text-center">Edit</th>
 						<th class="text-center">Delete</th>
 					</tr>
@@ -220,7 +224,7 @@ textarea
 	</div>
 </div>
 
-<div class="modal" id="confirmDeleteCustomerModal" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteCustomerModal" data-backdrop="static" data-keyboard="false">
+<div class="modal" id="confirmDeleteEmployeeModal" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteCustomerModal" data-backdrop="static" data-keyboard="false">
 	<div class="modal-dialog" role="document">
 		<div class="modal-content">
 			<div class="modal-header">
@@ -232,7 +236,7 @@ textarea
 					<div class="form-group">
 						<label class="col-sm-4 control-label">User :</label>
 						<div class="col-sm-8">
-							<label class="control-label" id="lblConfirm-User"></label>
+							<label class="control-label" id="lblConfirm-Username"></label>
 						</div>
 					</div>
 					<div class="form-group">
@@ -248,22 +252,22 @@ textarea
 						</div>
 					</div>
 					<div class="form-group">
-						<label class="col-sm-4 control-label">Tel :</label>
+						<label class="col-sm-4 control-label">Nick Name :</label>
 						<div class="col-sm-8">
-							<label class="control-label" id="lblConfirm-Tel"></label>
+							<label class="control-label" id="lblConfirm-Nickname"></label>
 						</div>
 					</div>
 					<div class="form-group">
-						<label class="col-sm-4 control-label">From Web :</label>
+						<label class="col-sm-4 control-label">Employee Type :</label>
 						<div class="col-sm-8">
-							<label class="control-label" id="lblConfirm-FromWeb"></label>
+							<label class="control-label" id="lblConfirm-EmployeeType"></label>
 						</div>
 					</div>
 				</form>
 				
 			</div>
 			<div class="modal-footer">
-				<input type="hidden" id="h_delete_customer" value=""/>
+				<input type="hidden" id="h_delete_employee" value=""/>
 				<button type="button" class="btn btn-primary btn-delete-confirm-yes" data-dismiss="modal">Yes</button>
 				<button type="button" class="btn btn-default" data-dismiss="modal">No</button>
 			</div>
@@ -275,7 +279,8 @@ textarea
 <script src="${context}/frameworklib/bootstrap/js/bootstrap.min.js"></script>
 <script type="text/javascript">
 
-var arr_customer = [];
+var arr_employee = [];
+var arr_employeeTypes = [];
 
 var actionPage = function(url) {
 	window.location = url;
@@ -291,57 +296,64 @@ var logout = function(){
 
 $(function(){
 
-	$("#txtCustomerUser").focus();
+	$("#txtEmployeeUser").focus();
 
-	$.get( "${context}/Web/GetWebs", function( data ) {
+	$.get( "${context}/Employee/GetEmployeeTypes", function( data ) {
+	
+		arr_employeeTypes = [];
 		
 		if(data["response"]=="success") {
-			$.each(data["message"]["webs"], function(indx,item){
-				$("#selCustomerFromWeb").append($("<option>").val(item["webCode"]).text(item["webCode"]));
+			$.each(data["message"]["employeeTypes"], function(indx,item){
+			
+				$("#selEmployeeType").append($("<option>").val(item["typeId"]).text(item["typeName"]));
+				
+				arr_employeeTypes.push({ typeId : item["typeId"], typeName : item["typeName"] });
 			});
 		}
 	});
 	
-	searchCustomer();
+	SearchEmployee();
 
 });
 
 $("#frmSearch input").keypress(function (e) {
     if ((e.which && e.which == 13) || (e.keyCode && e.keyCode == 13)) {
-        searchCustomer();
+        SearchEmployee();
         return false;
     } else {
         return true;
     }
 });
 
-var clearData = function() {
-	$("#txtCustomerUser").val("");
-	$("#txtCustomerFirstName").val("");
-	$("#txtCustomerLastName").val("");
-	$("#txtCustomerTel").val("");
-	$("#selCustomerFromWeb").val("");
-	$("#tbCustomer").find('tbody').empty();
-	$("#tbCustomer").find('tbody').append($("<tr>").append($("<td colspan='9' class='text-center'>").text("No data")));
-	arr_customer = [];
+var ClearData = function() {
+	$("#txtEmployeeUser").val("");
+	$("#txtEmployeeFirstName").val("");
+	$("#txtEmployeeLastName").val("");
+	$("#txtEmployeeNickName").val("");
+	$("#selEmployeeType").val("");
+	$("#txtEmployeeRemark").val("");
+	$("#tbEmployee").find('tbody').empty();
+	$("#tbEmployee").find('tbody').append($("<tr>").append($("<td colspan='9' class='text-center'>").text("No data")));
+	arr_employee = [];
 }
 
-var searchCustomer = function(){
+var SearchEmployee = function(){
 	
 	var bgOverlay = $("#bgOverlay");
 	var loadingImg = $("#loadingImg");
-	var tbCustomer = $("#tbCustomer").find('tbody');
+	var tbEmployee = $("#tbEmployee").find('tbody');
 	
 	var param = {};
-	param.userName = $("#txtCustomerUser").val();
-	param.firstName = $("#txtCustomerFirstName").val();
-	param.lastName = $("#txtCustomerLastName").val();
-	param.telephone = $("#txtCustomerTel").val();
-	param.webCode = $("#selCustomerFromWeb").val();
+	param.userName = $("#txtEmployeeUser").val();
+	param.firstName = $("#txtEmployeeFirstName").val();
+	param.lastName = $("#txtEmployeeLastName").val();
+	param.nickName = $("#txtEmployeeNickName").val();
+	param.employeeType = $("#selEmployeeType").val();
+	param.remark = $("#txtEmployeeRemark").val();
 	
 	$.ajax({
 		method: "POST",
-		url: "${context}/Customer/SearchCustomerOnly",
+		url: "${context}/Employee/SearchEmployee",
 		cache: false,
 		data: param,
 		dataType: "json",
@@ -359,25 +371,29 @@ var searchCustomer = function(){
 			
 				var item = data["message"];
 				
-				tbCustomer.empty();
-				arr_customer = [];
+				tbEmployee.empty();
+				arr_employee = [];
 				
-				$.each(item["customers"], function(indx, item){
+				$.each(item["employees"], function(indx, item){
+				
+					var empType = $.grep(arr_employeeTypes, function(obj) {
+						return obj.typeId == item["empTypeId"];
+					});
 					
-					tbCustomer.append(
+					tbEmployee.append(
 						$("<tr>")
 							.append($("<td class='text-center fit'>").text(indx+1))
-							.append($("<td class='text-center fit'>").text(item["userName"]))
-							.append($("<td class='fit'>").text(item["cusFirstName"]))
-							.append($("<td class='fit'>").text(item["cusLastName"]))
-							.append($("<td class='text-center fit'>").text(item["cusTel"]))
-							.append($("<td class='fit'>").text(item["remark"]))
-							.append($("<td class='text-center fit'>").text(item["web"]["webCode"]))
+							.append($("<td class='fit'>").text(item["userName"]))
+							.append($("<td class='fit'>").text(item["empFirtsName"]))
+							.append($("<td class='fit'>").text(item["empLastName"]))
+							.append($("<td class='fit'>").text(item["empNickName"]))
+							.append($("<td class='fit'>").text(empType[0]["typeName"]))
+							.append($("<td class='fit'>").text(item["empRemark"]))
 							.append($("<td class='text-center fit'>")
 								.html(
 									$('<a href="javascript:void(0);">')
 										.attr('class','text-danger')
-										.attr('onclick','editCustomer("'+item["userName"]+'")')
+										.attr('onclick','EditEmployee("'+item["empId"]+'")')
 										.text('Edit')
 								)
 							)
@@ -385,25 +401,25 @@ var searchCustomer = function(){
 								.html(
 									$('<a href="javascript:void(0);">')
 										.attr('class','text-danger')
-										.attr('onclick','confirmDeleteCustomer("'+item["userName"]+'")')
+										.attr('onclick','ConfirmDeleteEmployee("'+item["empId"]+'")')
 										.text('Delete')
 								)
 							)
 					);
 					
-					arr_customer.push(item);
+					arr_employee.push(item);
 					
 				});
 				
-				if($.isEmptyObject(item["customers"])) {
-					tbCustomer.append($("<tr>").append($("<td colspan='9' class='text-center'>").text("No data")));
+				if($.isEmptyObject(item["employees"])) {
+					tbEmployee.append($("<tr>").append($("<td colspan='9' class='text-center'>").text("No data")));
 				}
 			}
 			
 		},
 		error: function(jqXHR,textStatus,errorThrown) {
 			
-			clearData();
+			ClearData();
 			
 			var modal = $("#messageModal");
 			modal.find(".modal-title").html("Error");
@@ -413,61 +429,65 @@ var searchCustomer = function(){
 	});
 };
 
-var editCustomer = function(userName) {
+var EditEmployee = function(empId) {
 	
-	var _tmp = $.grep(arr_customer, function(obj) {
-		return obj.userName === userName;
+	var _tmp = $.grep(arr_employee, function(obj) {
+		return obj.empId == empId;
 	});
 	
 	var param = {};
+	param.empId = _tmp[0]["empId"];
 	param.userName = _tmp[0]["userName"];
-	param.firstName = _tmp[0]["cusFirstName"];
-	param.lastName = _tmp[0]["cusLastName"];
-	param.telephone = _tmp[0]["cusTel"];
-	param.remark = _tmp[0]["remark"];
-	param.webCode = _tmp[0]["web"]["webCode"];
-	param.banks = _tmp[0]["banks"];
+	param.firstName = _tmp[0]["empFirtsName"];
+	param.lastName = _tmp[0]["empLastName"];
+	param.nickName = _tmp[0]["empNickName"];
+	param.remark = _tmp[0]["empRemark"];
+	param.employeeType = _tmp[0]["empTypeId"];
 	
 	var form = $('<form>');
-	form.attr('action','${context}/Customer/EditCustomer/Form');
+	form.attr('action','${context}/Employee/EditEmployee/Form');
 	form.attr('method','post');
 	
-	form.html($('<input type="hidden" name="editCustomer">').val(JSON.stringify(param)));
+	form.html($('<input type="hidden" name="editEmployee">').val(JSON.stringify(param)));
 	form.appendTo('body');
 	form.submit();
 };
 
-var confirmDeleteCustomer = function(userName) {
+var ConfirmDeleteEmployee = function(empId) {
 	
-	var _tmp = $.grep(arr_customer, function(obj) {
-		return obj.userName === userName;
+	var _tmp = $.grep(arr_employee, function(obj) {
+		return obj.empId == empId;
 	});
 	
-	$('#lblConfirm-User').text(_tmp[0]["userName"]);
-	$('#lblConfirm-FirstName').text(_tmp[0]["cusFirstName"]);
-	$('#lblConfirm-LastName').text(_tmp[0]["cusLastName"]);
-	$('#lblConfirm-Tel').text(_tmp[0]["cusTel"]);
-	$('#lblConfirm-FromWeb').text(_tmp[0]["web"]["webCode"]);
+	$('#lblConfirm-Username').text(_tmp[0]["userName"]);
+	$('#lblConfirm-FirstName').text(_tmp[0]["empFirtsName"]);
+	$('#lblConfirm-LastName').text(_tmp[0]["empLastName"]);
+	$('#lblConfirm-Nickname').text(_tmp[0]["empNickName"]);
 	
-	$('#h_delete_customer').val(_tmp[0]["userName"]);
+	var empType = $.grep(arr_employeeTypes, function(obj) {
+		return obj.typeId == _tmp[0]["empTypeId"];
+	});
+	$('#lblConfirm-EmployeeType').text(empType[0]["typeName"]);
 	
-	$("#confirmDeleteCustomerModal").modal('toggle');
+	$('#h_delete_employee').val(_tmp[0]["empId"]);
+	
+	$("#confirmDeleteEmployeeModal").modal('toggle');
 };
 
 $(".btn-delete-confirm-yes").on('click', function(){
-	deleteCustomer($("#h_delete_customer").val());
+	deleteEmployee($("#h_delete_employee").val());
 });
 
-var deleteCustomer = function(userName) {
+var deleteEmployee = function(empId) {
 	
 	var bgOverlay = $("#bgOverlay");
 	var loadingImg = $("#loadingImg");
 	
 	$.ajax({
 		method: "POST",
-		url: '${context}/Customer/DeleteCustomer',
+		url: '${context}/Employee/DeleteEmployee',
 		cache: false,
-		data: { userName:userName },
+		data: { empId : empId },
 		dataType: "json",
 		beforeSend: function() {
 			bgOverlay.show();
@@ -484,8 +504,8 @@ var deleteCustomer = function(userName) {
 			if(data["response"]=="success") {
 				
 				modal.find(".modal-title").html("Message");
-				modal.find(".modal-body").html("Delete customer success.");
-				modal.find(".modal-footer").find("button").attr('onclick',"actionPage('${context}/Customer/Manage/Form')");
+				modal.find(".modal-body").html(data["message"]);
+				modal.find(".modal-footer").find("button").attr('onclick',"actionPage('${context}/Employee/Manage/Form')");
 				modal.modal('toggle');
 				
 			} else {
@@ -497,7 +517,7 @@ var deleteCustomer = function(userName) {
 		},
 		error: function(jqXHR,textStatus,errorThrown) {
 			
-			clearData();
+			ClearData();
 			
 			var modal = $("#messageModal");
 			modal.find(".modal-title").html("Error");

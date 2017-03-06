@@ -196,6 +196,7 @@ public class CustomerEJB implements CustomerRemote {
 				cus.setCusTel(customer.getTelephone());
 				cus.setWeb(webEntity);
 				cus.setRemark(customer.getRemark());
+				cus.setCreateDate(new Timestamp(System.currentTimeMillis()));
 				cus.setCreateBy(customer.getCreateBy());
 				
 				em.persist(cus);
@@ -351,6 +352,8 @@ public class CustomerEJB implements CustomerRemote {
 			c.setCusTel(customer.getTelephone());
 			c.setRemark(customer.getRemark());
 			c.setWeb(w);
+			c.setUpdateDate(new Timestamp(System.currentTimeMillis()));
+			c.setUpdateBy(customer.getCreateBy());
 			
 			em.persist(c);
 			

@@ -1,7 +1,9 @@
 package bms.entity;
 
 import java.io.Serializable;
+
 import javax.persistence.*;
+
 import java.sql.Timestamp;
 
 
@@ -15,6 +17,7 @@ public class Employee implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name="EmpId")
 	private int empId;
 
@@ -36,6 +39,9 @@ public class Employee implements Serializable {
 	@Column(name="EmpRemark")
 	private String empRemark;
 
+	@Column(name="EmpTypeId")
+	private int empTypeId;
+
 	@Column(name="UpdateBy")
 	private String updateBy;
 
@@ -44,6 +50,9 @@ public class Employee implements Serializable {
 
 	@Column(name="Version")
 	private long version;
+	
+	@OneToOne(mappedBy="employee")
+	private EmployeeAuthen employeeAuth;
 
 	public Employee() {
 	}
@@ -104,6 +113,14 @@ public class Employee implements Serializable {
 		this.empRemark = empRemark;
 	}
 
+	public int getEmpTypeId() {
+		return this.empTypeId;
+	}
+
+	public void setEmpTypeId(int empTypeId) {
+		this.empTypeId = empTypeId;
+	}
+
 	public String getUpdateBy() {
 		return this.updateBy;
 	}
@@ -126,6 +143,14 @@ public class Employee implements Serializable {
 
 	public void setVersion(long version) {
 		this.version = version;
+	}
+
+	public EmployeeAuthen getEmployeeAuth() {
+		return employeeAuth;
+	}
+
+	public void setEmployeeAuth(EmployeeAuthen employeeAuth) {
+		this.employeeAuth = employeeAuth;
 	}
 
 }

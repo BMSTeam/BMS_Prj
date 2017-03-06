@@ -126,6 +126,55 @@ public class BetTranEJB implements BetTranRemote {
 				betTranEntity.setCreateBy(btib.getCreateBy());
 				//betTranEntity.setUpdateDate(new Timestamp(System.currentTimeMillis()));
 				//betTranEntity.setUpdateBy(btib.getUpdateBy());
+				
+			} else if(btib.getTranType().equals("Withdraw")) {
+				
+				betTranEntity.setTranDate(btib.getTranDate());
+				betTranEntity.setTranTime(btib.getTranTime());
+				betTranEntity.setUserName(btib.getUserName());
+				betTranEntity.setWebCode(btib.getWebCode());
+				betTranEntity.setCompBankCode(btib.getCompBankCode());
+				betTranEntity.setCompBankAcc(btib.getCompBankAcc());
+				//betTranEntity.setCusBankCode(btib.getCusBankCode());
+				//betTranEntity.setCusBankAcc(btib.getCusBankAcc());
+				betTranEntity.setTranType(btib.getTranType());
+				betTranEntity.setChannelCode(btib.getChannelCode());
+				betTranEntity.setAmount(btib.getAmount());
+				//betTranEntity.setCredit(btib.getCredit());
+				//betTranEntity.setBalance(btib.getBalance());
+				betTranEntity.setFreeFee(btib.getFreeFee());
+				//betTranEntity.setRemark(btib.getRemark());
+				betTranEntity.setAppoveStatus((short)0);
+				//betTranEntity.setAppoveBy(btib.getApproveBy());
+				betTranEntity.setCreateDate(new Timestamp(System.currentTimeMillis()));
+				betTranEntity.setCreateBy(btib.getCreateBy());
+				//betTranEntity.setUpdateDate(new Timestamp(System.currentTimeMillis()));
+				//betTranEntity.setUpdateBy(btib.getUpdateBy());
+				
+			} else if(btib.getTranType().equals("Move")) {
+				
+				betTranEntity.setTranDate(btib.getTranDate());
+				betTranEntity.setTranTime(btib.getTranTime());
+				betTranEntity.setUserName(btib.getUserName());
+				betTranEntity.setWebCode(btib.getWebCode());
+				betTranEntity.setCompBankCode(btib.getCompBankCode());
+				betTranEntity.setCompBankAcc(btib.getCompBankAcc());
+				//betTranEntity.setCusBankCode(btib.getCusBankCode());
+				//betTranEntity.setCusBankAcc(btib.getCusBankAcc());
+				betTranEntity.setTranType(btib.getTranType());
+				betTranEntity.setChannelCode(btib.getChannelCode());
+				betTranEntity.setAmount(btib.getAmount());
+				//betTranEntity.setCredit(btib.getCredit());
+				//betTranEntity.setBalance(btib.getBalance());
+				betTranEntity.setFreeFee(btib.getFreeFee());
+				//betTranEntity.setRemark(btib.getRemark());
+				betTranEntity.setAppoveStatus((short)0);
+				//betTranEntity.setAppoveBy(btib.getApproveBy());
+				betTranEntity.setCreateDate(new Timestamp(System.currentTimeMillis()));
+				betTranEntity.setCreateBy(btib.getCreateBy());
+				//betTranEntity.setUpdateDate(new Timestamp(System.currentTimeMillis()));
+				//betTranEntity.setUpdateBy(btib.getUpdateBy());
+				
 			}
 			
 			em.persist(betTranEntity);
