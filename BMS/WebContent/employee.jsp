@@ -193,11 +193,12 @@ textarea
 						<th class="text-center">Remark</th>
 						<th class="text-center">Edit</th>
 						<th class="text-center">Delete</th>
+						<th class="text-center">Reset Password</th>
 					</tr>
 				</thead>
 				<tbody>
 					<tr>
-						<td colspan="9" class='text-center'>No data</td>
+						<td colspan="10" class='text-center'>No data</td>
 					</tr>
 				</tbody>
 			</table>
@@ -333,7 +334,7 @@ var ClearData = function() {
 	$("#selEmployeeType").val("");
 	$("#txtEmployeeRemark").val("");
 	$("#tbEmployee").find('tbody').empty();
-	$("#tbEmployee").find('tbody').append($("<tr>").append($("<td colspan='9' class='text-center'>").text("No data")));
+	$("#tbEmployee").find('tbody').append($("<tr>").append($("<td colspan='10' class='text-center'>").text("No data")));
 	arr_employee = [];
 }
 
@@ -405,6 +406,14 @@ var SearchEmployee = function(){
 										.text('Delete')
 								)
 							)
+							.append($("<td class='text-center fit'>")
+								.html(
+									$('<a href="javascript:void(0);">')
+										.attr('class','text-danger')
+										.attr('onclick','ResetEmployeePassword("'+item["empId"]+'")')
+										.text('Reset Password')
+								)
+							)
 					);
 					
 					arr_employee.push(item);
@@ -412,7 +421,7 @@ var SearchEmployee = function(){
 				});
 				
 				if($.isEmptyObject(item["employees"])) {
-					tbEmployee.append($("<tr>").append($("<td colspan='9' class='text-center'>").text("No data")));
+					tbEmployee.append($("<tr>").append($("<td colspan='10' class='text-center'>").text("No data")));
 				}
 			}
 			
@@ -525,6 +534,25 @@ var deleteEmployee = function(empId) {
 			modal.modal('toggle');
 		}
 	});
+};
+
+var ResetEmployeePassword = function(empId) {
+
+	var _tmp = $.grep(arr_employee, function(obj) {
+		return obj.empId == empId;
+	});
+	
+	var param = {};
+	param.empId = _tmp[0]["empId"];
+	param.userName = _tmp[0]["userName"];
+	
+	var form = $('<form>');
+	form.attr('action','${context}/Employee/ResetPassword/Form');
+	form.attr('method','post');
+	
+	form.html($('<input type="hidden" name="resetEmployee">').val(JSON.stringify(param)));
+	form.appendTo('body');
+	form.submit();
 };
 
 </script>
