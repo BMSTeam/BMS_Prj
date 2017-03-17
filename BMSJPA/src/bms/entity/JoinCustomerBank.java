@@ -1,7 +1,9 @@
 package bms.entity;
 
 import java.io.Serializable;
+
 import javax.persistence.*;
+
 import java.sql.Timestamp;
 
 
@@ -10,7 +12,12 @@ import java.sql.Timestamp;
  * 
  */
 @Entity
-@NamedQuery(name="JoinCustomerBank.findAll", query="SELECT j FROM JoinCustomerBank j")
+@NamedQueries({
+	@NamedQuery(name="JoinCustomerBank.findAll",
+		query="SELECT j FROM JoinCustomerBank j"),
+	@NamedQuery(name="JoinCustomerBank.getCustomerBankByUsername",
+		query="SELECT j FROM JoinCustomerBank j WHERE j.status=1 AND j.id.userName=:userName")
+})
 public class JoinCustomerBank implements Serializable {
 	private static final long serialVersionUID = 1L;
 

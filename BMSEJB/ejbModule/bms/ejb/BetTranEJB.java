@@ -135,8 +135,8 @@ public class BetTranEJB implements BetTranRemote {
 				betTranEntity.setWebCode(btib.getWebCode());
 				betTranEntity.setCompBankCode(btib.getCompBankCode());
 				betTranEntity.setCompBankAcc(btib.getCompBankAcc());
-				//betTranEntity.setCusBankCode(btib.getCusBankCode());
-				//betTranEntity.setCusBankAcc(btib.getCusBankAcc());
+				betTranEntity.setCusBankCode(btib.getCusBankCode());
+				betTranEntity.setCusBankAcc(btib.getCusBankAcc());
 				betTranEntity.setTranType(btib.getTranType());
 				betTranEntity.setChannelCode(btib.getChannelCode());
 				betTranEntity.setAmount(btib.getAmount());

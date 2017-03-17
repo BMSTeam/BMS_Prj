@@ -74,9 +74,19 @@ public class SaveBetTran extends HttpServlet {
 			btib.setWebCode(o.get("tranWebCode").getAsString());
 			btib.setCompBankCode(o.get("tranCompBankCode").getAsString());
 			btib.setCompBankAcc(o.get("tranCompBankAcc").getAsString());
-			btib.setChannelCode(o.get("tranChannelCode").getAsString());
 			btib.setAmount(o.get("tranAmount").getAsBigDecimal());
-			btib.setFreeFee(o.get("tranFreeFee").getAsBigDecimal());
+			
+			if(btib.getTranType().equals("Deposit")) {
+				btib.setChannelCode(o.get("tranChannelCode").getAsString());
+				btib.setFreeFee(o.get("tranFreeFee").getAsBigDecimal());
+			}
+			if(btib.getTranType().equals("Withdraw")) {
+				btib.setCusBankCode(o.get("tranCusBankCode").getAsString());
+				btib.setCusBankAcc(o.get("tranCusBankNo").getAsString());
+			}
+			if(btib.getTranType().equals("Move")) {
+				
+			}
 			
 			HttpSession session = request.getSession();
 			btib.setCreateBy((String) session.getAttribute("username"));

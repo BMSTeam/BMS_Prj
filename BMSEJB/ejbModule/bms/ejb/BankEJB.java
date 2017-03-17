@@ -15,6 +15,7 @@ import org.apache.logging.log4j.Logger;
 
 import bms.entity.Bank;
 import bms.entity.JoinCompanyBank;
+import bms.entity.JoinCustomerBank;
 import bms.model.BankInfoBean;
 import bms.utils.BMSUtil;
 
@@ -100,6 +101,50 @@ public class BankEJB implements BankRemote {
 			
 			jsonObj.addProperty("response", "success");
 			jsonObj.add("message", BMSUtil.ConvertJavaObjToJsonObj(lcompBankMap));
+			
+			logger.debug(gson.toJson(jsonObj));
+			
+		} catch (javax.persistence.NoResultException e) {
+			jsonObj.addProperty("response", "error");
+			jsonObj.addProperty("message", "No Result");
+		} catch (Exception e) {
+			jsonObj.addProperty("response", "error");
+			jsonObj.addProperty("message", e.getMessage());
+
+			logger.error("EJBException", e);
+		}
+		
+		return gson.toJson(jsonObj);
+	}
+
+	@Override
+	public String getCustomerBanksOnlyActiveStatus(String userName) {
+		
+		Gson gson = new Gson();
+		JsonObject jsonObj = new JsonObject();
+		
+		try {
+			
+			TypedQuery<JoinCustomerBank> query = em.createNamedQuery("JoinCustomerBank.getCustomerBankByUsername", JoinCustomerBank.class);
+			query.setParameter("userName", userName);
+			List<JoinCustomerBank> list = query.getResultList();
+			
+			List<BankInfoBean> lBanks = new ArrayList<BankInfoBean>();
+			for(JoinCustomerBank j : list) {
+				
+				BankInfoBean bankInfoBean = new BankInfoBean();
+				
+				bankInfoBean.setBankCode(j.getBank().getBankCode());
+				bankInfoBean.setBankNo(j.getBankNo());
+				
+				lBanks.add(bankInfoBean);
+			}
+			
+			Map<String, Object> lBankMap = new HashMap<String, Object>();
+			lBankMap.put("cusBanks", lBanks);
+			
+			jsonObj.addProperty("response", "success");
+			jsonObj.add("message", BMSUtil.ConvertJavaObjToJsonObj(lBankMap));
 			
 			logger.debug(gson.toJson(jsonObj));
 			

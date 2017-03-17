@@ -247,6 +247,9 @@ input[type="text"]:focus.noborder-input
 					<tr>
 						<td><input type="text" class="form-control input-sm input-height noborder-input" id="txtTranFee" placeholder="Fee" readonly></td>
 					</tr>
+					<tr class="hide">
+						<td><input type="text" class="form-control input-sm input-height noborder-input" id="txtTranToCusBank" placeholder="To Bank" readonly></td>
+					</tr>
 				</table>
 			</div>
 
@@ -418,7 +421,7 @@ input[type="text"]:focus.noborder-input
 						</div>
 					</div>
 					<div class="form-group">
-						<label class="col-sm-4 control-label">To Bank :</label>
+						<label class="col-sm-4 control-label">Company Bank :</label>
 						<div class="col-sm-8">
 							<label class="control-label" id="lblConfirm-TranToBank"></label>
 						</div>
@@ -433,6 +436,12 @@ input[type="text"]:focus.noborder-input
 						<label class="col-sm-4 control-label">Fee :</label>
 						<div class="col-sm-8">
 							<label class="control-label" id="lblConfirm-TranFee"></label>
+						</div>
+					</div>
+					<div class="form-group hide">
+						<label class="col-sm-4 control-label">Customer Bank :</label>
+						<div class="col-sm-8">
+							<label class="control-label" id="lblConfirm-TranToCusBank"></label>
 						</div>
 					</div>
 				</form>
@@ -532,6 +541,9 @@ var searchCustomer = function(){
 				
 				// set default user
 				$("#txtTranUser").val(item["userName"]);
+				
+				// set customer banks
+				getSelTranToCusBank(item["userName"]);
 				
 				// set bank list
 				var bankTable = $("#bank-table").find('tbody');
@@ -690,6 +702,31 @@ $(".btn-tranType").on('click', function(){
 	$(".btn-tranType").removeClass("btn-default");
 	$(".btn-tranType").not(this).addClass('btn-default');
 	$(this).addClass('btn-warning');
+	
+	var tranTran = $(this).html();
+	if(tranTran=="ฝาก") {
+	
+		var ele1 = $("#selTranPayCh");
+		var ele2 = $("#txtTranFee");
+		var ele3 = $("#selTranToCusBank");
+		
+		ele1.closest("tr").removeClass("hide");
+		ele2.closest("tr").removeClass("hide");
+		ele3.closest("tr").addClass("hide");
+		
+	} else if(tranTran=="ถอน") {
+		
+		var ele1 = $("#selTranPayCh");
+		var ele2 = $("#txtTranFee");
+		var ele3 = $("#selTranToCusBank");
+		
+		ele1.closest("tr").addClass("hide");
+		ele2.closest("tr").addClass("hide");
+		ele3.closest("tr").removeClass("hide");
+		
+	} else if(tranTran=="ย้าย") {
+		
+	}
 });
 
 var prepareSaveBetTran = function(){
@@ -703,18 +740,8 @@ var prepareSaveBetTran = function(){
 	var txtTranToBankCode = $("#selTranToBank :selected").text();
 	var txtTranPayCh = $("#selTranPayCh").val();
 	var txtTranFee = $("#txtTranFee").val();
-	
-	if(txtTranUser=="" || txtTranMoney=="" || txtTranDate=="" || 
-		txtTranTime=="" || txtTranWeb=="" || txtTranToBankNo=="" ||
-		txtTranPayCh=="" || txtTranFee=="") {
-		
-		var modal = $("#messageModal");
-		modal.find(".modal-title").html("Warning");
-		modal.find(".modal-body").html("กรุณากรอกข้อมูลให้ครบ!");
-		modal.modal('toggle');
-			
-		return;
-	}
+	var txtTranToCusBankNo = $("#selTranToCusBank").val();
+	var txtTranToCusBankCode = $("#selTranToCusBank :selected").text();
 	
 	var paramBetTran = {};
 	paramBetTran.tranUserName = txtTranUser;
@@ -724,8 +751,6 @@ var prepareSaveBetTran = function(){
 	paramBetTran.tranWebCode = txtTranWeb;
 	paramBetTran.tranCompBankCode = txtTranToBankCode;
 	paramBetTran.tranCompBankAcc = txtTranToBankNo;
-	paramBetTran.tranChannelCode = txtTranPayCh;
-	paramBetTran.tranFreeFee = txtTranFee;
 
 	$('.btn-tranType').each(function(){
 	
@@ -735,9 +760,49 @@ var prepareSaveBetTran = function(){
 		if(current==true) {
 		
 			if(tranTran=="ฝาก") {
+			
+				if(txtTranUser=="" || txtTranMoney=="" || txtTranDate=="" || 
+					txtTranTime=="" || txtTranWeb=="" || txtTranToBankNo=="" ||
+					txtTranPayCh=="" || txtTranFee=="") {
+					
+					var modal = $("#messageModal");
+					modal.find(".modal-title").html("Warning");
+					modal.find(".modal-body").html("กรุณากรอกข้อมูลให้ครบ!");
+					modal.modal('toggle');
+						
+					return;
+				}
+			
 				paramBetTran.tranType = "Deposit";
+				paramBetTran.tranChannelCode = txtTranPayCh;
+				paramBetTran.tranFreeFee = txtTranFee;
+				
+				$("#lblConfirm-TranPayCh").closest(".form-group").removeClass("hide");
+				$("#lblConfirm-TranFee").closest(".form-group").removeClass("hide");
+				$("#lblConfirm-TranToCusBank").closest(".form-group").addClass("hide");
+	
 			} else if(tranTran=="ถอน") {
+			
+				if(txtTranUser=="" || txtTranMoney=="" || txtTranDate=="" || 
+					txtTranTime=="" || txtTranWeb=="" || txtTranToBankNo=="" ||
+					txtTranToCusBankNo=="" || txtTranToCusBankCode=="") {
+					
+					var modal = $("#messageModal");
+					modal.find(".modal-title").html("Warning");
+					modal.find(".modal-body").html("กรุณากรอกข้อมูลให้ครบ!");
+					modal.modal('toggle');
+						
+					return;
+				}
+			
 				paramBetTran.tranType = "Withdraw";
+				paramBetTran.tranCusBankNo = txtTranToCusBankNo;
+				paramBetTran.tranCusBankCode = txtTranToCusBankCode;
+				
+				$("#lblConfirm-TranPayCh").closest(".form-group").addClass("hide");
+				$("#lblConfirm-TranFee").closest(".form-group").addClass("hide");
+				$("#lblConfirm-TranToCusBank").closest(".form-group").removeClass("hide");
+				
 			} else if(tranTran=="ย้าย") {
 				paramBetTran.tranType = "Move";
 			}
@@ -751,6 +816,7 @@ var prepareSaveBetTran = function(){
 			$("#lblConfirm-TranToBank").text(paramBetTran.tranCompBankCode);
 			$("#lblConfirm-TranPayCh").text(paramBetTran.tranChannelCode);
 			$("#lblConfirm-TranFee").text(paramBetTran.tranFreeFee);
+			$("#lblConfirm-TranToCusBank").text(paramBetTran.tranCusBankCode);
 			
 			var modal = $("#confirmBetTranModal");
 			modal.modal('toggle');
@@ -769,6 +835,7 @@ var saveBetTran = function(param){
 		method: "POST",
 		url: "${context}/BetTran/SaveBetTran",
 		cache: false,
+		contentType: "application/json",
 		data: param,
 		dataType: "json",
 		beforeSend: function() {
@@ -849,9 +916,13 @@ var clearFormBetTran = function() {
 	$("#selTranToBank").val("");
 	$("#selTranPayCh").val("");
 	$("#txtTranFee").val("");
+	$("#selTranToCusBank").val("");
 }
 
 var openTranForm = function() {
+
+	$('.btn-tranType')[0].click();
+	
 	$("#txtTranUser").css("background-color","transparent");
 	$("#txtTranMoney").removeAttr("readonly");
 	$("#txtTranDate").css("background-color","transparent");
@@ -927,6 +998,25 @@ var openTranForm = function() {
 		if(data["response"]=="success") {
 			$.each(data["message"]["paymentChannels"], function(indx,item){
 				selTranPayCh.append($("<option>").val(item["channelCode"]).text(item["channelCode"]));
+			});
+		}
+	});
+}
+
+var getSelTranToCusBank = function(userName) {
+	// change input to select and set option
+	var txtTranToCusBank = $("#txtTranToCusBank");
+    txtTranToCusBank.replaceWith($('<select id="selTranToCusBank" class="form-control input-sm">'));
+    
+    var selTranToCusBank = $("#selTranToCusBank");
+    selTranToCusBank.html("");
+	selTranToCusBank.append($("<option>").val("").text("Customer Bank"));
+	
+	$.get( "${context}/Bank/GetCustomerBankByUsername", { userName : userName }, function( data ) {
+		
+		if(data["response"]=="success") {
+			$.each(data["message"]["cusBanks"], function(indx,item){
+				selTranToCusBank.append($("<option>").val(item["bankNo"]).text(item["bankCode"]));
 			});
 		}
 	});
